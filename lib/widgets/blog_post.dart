@@ -188,7 +188,7 @@ class _BlogPostState extends State<BlogPost> {
                             color: Colors.grey,
                           );
                         }
-                        return PoppinsText(text: '0');
+                        return const PoppinsText(text: '0');
                       },
                     ),
                   ),
@@ -216,7 +216,7 @@ class _BlogPostState extends State<BlogPost> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: snapshot.data!.docs.map((doc) {
-                  final commentData = doc.data() as Map<String, dynamic>;
+                  final commentData = doc.data();
                   return Comment(
                     comment: commentData['CommentText'],
                     user: commentData['CommentedBy'],
