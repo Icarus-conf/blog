@@ -110,6 +110,8 @@ class _BlogPostState extends State<BlogPost> {
     );
   }
 
+  bool isVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -131,6 +133,9 @@ class _BlogPostState extends State<BlogPost> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PoppinsText(text: widget.msg),
+              const Divider(
+                thickness: 0.5,
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -196,35 +201,49 @@ class _BlogPostState extends State<BlogPost> {
               ),
             ],
           ),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                isVisible = !isVisible;
+                setState(() {});
+              },
+              child: PoppinsText(
+                text: isVisible ? 'Hide Comments' : 'Show Comments',
+              ),
+            ),
+          ),
           const SizedBox(
             height: 12,
           ),
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Posts')
-                .doc(widget.postId)
-                .collection('Comments')
-                .orderBy('CommentTime', descending: false)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: snapshot.data!.docs.map((doc) {
-                  final commentData = doc.data();
-                  return Comment(
-                    comment: commentData['CommentText'],
-                    user: commentData['CommentedBy'],
-                    createdAt: formatDate(commentData['CommentTime']),
+          Visibility(
+            visible: isVisible,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('Posts')
+                  .doc(widget.postId)
+                  .collection('Comments')
+                  .orderBy('CommentTime', descending: false)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                }).toList(),
-              );
-            },
+                }
+                return ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: snapshot.data!.docs.map((doc) {
+                    final commentData = doc.data();
+                    return Comment(
+                      comment: commentData['CommentText'],
+                      user: commentData['CommentedBy'],
+                      createdAt: formatDate(commentData['CommentTime']),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ),
         ],
       ),
