@@ -108,7 +108,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.only(
+              bottom: 12,
+              right: 12,
+              left: 12,
+            ),
             color: const Color(0xFFced4da),
             child: Column(
               children: [

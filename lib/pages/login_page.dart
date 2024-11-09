@@ -3,6 +3,7 @@ import 'package:blog/components/text_format.dart';
 import 'package:blog/components/textfield_styling.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = 'LoginPage';
@@ -62,6 +63,12 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Lottie.asset(
+                "assets/blog-ic.json",
+              ),
+              SizedBox(
+                height: 12,
+              ),
               CustomTextField(
                 labelText: 'Enter your email',
                 controller: email,
